@@ -1,0 +1,83 @@
+from settings import settings
+import discord
+from discord.ext import commands
+
+# Intents del bot
+intents = discord.Intents.default()
+intents.message_content = True
+
+bot = commands.Bot(command_prefix="$", intents=intents)
+
+@bot.event
+async def on_ready():
+    print(f'We have logged in as {bot.user}')
+
+@bot.command()
+async def hello(ctx):
+    await ctx.send('Hello. :D')
+
+@bot.command()
+async def bye(ctx):
+    await ctx.send('😞')
+
+@bot.group()
+async def cool(ctx):
+    """Says if a user is cool."""
+    if ctx.invoked_subcommand is None:
+        await ctx.send(f'Yes, {ctx.subcommand_passed} is cool!')
+
+@cool.command(name='bot')
+async def _bot(ctx):
+    """Is the bot cool?"""
+    await ctx.send('Yes, the bot is cool!')
+
+def eco_advice(user_text):
+    text = user_text.lower()
+
+def eco_advice(user_text):
+    text = user_text.lower().strip()
+
+    if text == "plastic":
+        return (
+            "*Eco-friendly tips on plastics:*\n"
+            "- Reduce single-use bottles and bags.\n"
+            "- Reuse containers whenever possible.\n"
+            "- Separate plastic waste for recycling.\n"
+        )
+
+    if text == "window":
+        return (
+            "*Eco-friendly tips for windows:*\n"
+            "- Take advantage of natural light by keeping your windows clean.\n"
+            "- Use weatherstripping to prevent air leaks.\n"
+            "- Ventilate your home by opening windows instead of using air conditioning.\n"
+        )
+
+    if text == "glass":
+        return (
+            "*Eco-friendly tips about glass:*\n"
+            "- Recycle glass bottles and jars.\n"
+            "- Choose glass containers over plastic.\n"
+            "- Reuse glass jars for storage.\n"
+        )
+    
+    if text == "water":
+        return (
+            "*Eco-friendly tips about water:*\n"
+            "- Turn off the tap while brushing your teeth.\n"
+            "- Fix leaks.\n"
+            "- Use efficient showerheads.\n"
+    )
+    return "Unrecognized code. Use for example: `plastic`, `window`, `glass`."
+
+@bot.command()
+async def eco(ctx, *, texto_usuario: str = ""):
+    """Give eco-friendly advice based on keywords."""
+    if texto_usuario == "":
+        await ctx.send("Write something to give yourself an eco-friendly tip. Example: `$eco plastic`")
+        return
+
+    consejo = eco_advice(texto_usuario)
+    await ctx.send(consejo)
+
+bot.run("TOKEN GOES HERE")
